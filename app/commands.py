@@ -51,10 +51,16 @@ def cmdExec(commandArgs):
 def cmdPwd(_):
     print(os.getcwd())
 
+def cmdCd(commandArgs):
+    if len(commandArgs) == 0:
+        print("Usage: cd <directory>")
+        return
+    os.chdir(commandArgs[0])
 commandDict = {
     "exit": cmdExit,
     "echo": cmdEcho,
     "type": cmdType,
     "exec": cmdExec,
     "pwd" : cmdPwd,
+    "cd"  : cmdCd
 }
