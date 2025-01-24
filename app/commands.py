@@ -53,7 +53,6 @@ def cmdExec(commandArgs):
     try:
         commandDict[commandArgs[0].value](commandArgs[1:])
     except KeyError:
-        print(str(commandArgs))
         output = ""
         for arg in commandArgs[1:]:
             match arg.token_type:
