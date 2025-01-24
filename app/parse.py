@@ -43,6 +43,7 @@ def parse(userInput):
                     userTokens.append(Token(tokenType.doubleQuote, tokenString,False))
                     tokenString = ""
                 else:
+                    tokenString += char
                     quoteStack.append('"')
             case "'":
                 if len(quoteStack) > 0 and quoteStack[-1] == "'":
