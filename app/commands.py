@@ -55,6 +55,9 @@ def cmdCd(commandArgs):
     if len(commandArgs) == 0:
         print("Usage: cd <directory>")
         return
+    if not os.path.exists(commandArgs[0]):
+        print(f"cd: {commandArgs[0]}: No such file or directory")
+        return
     os.chdir(commandArgs[0])
 commandDict = {
     "exit": cmdExit,
