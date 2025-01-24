@@ -47,7 +47,7 @@ def parse(userInput):
                 case '"':
                     if len(quoteStack) > 0 and quoteStack[-1] == "'":
                         tokenString += char
-                    elif len(quoteStack) > 0 and quoteStack[-1] == '"':
+                    if len(quoteStack) > 0 and quoteStack[-1] == '"':
                         quoteStack.pop()
                         userTokens.append(Token(tokenType.doubleQuote, tokenString,False))
                         tokenString = ""
@@ -59,7 +59,7 @@ def parse(userInput):
                         userTokens.append(Token(tokenType.singleQuote, tokenString,False))
                         tokenString = ""
                     else:
-                        if len(quoteStack) == 0 or quoteStack[-1] != '"':
+                        if len(quoteStack) == 0 and quoteStack[-1] != '"':
                             quoteStack.append("'")
                         else:
                             tokenString += char
