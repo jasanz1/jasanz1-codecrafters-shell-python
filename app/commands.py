@@ -40,7 +40,7 @@ def cmdEcho(commandArgs):
             output += arg[1]
         elif arg[0] == parse.tokenType.doubleQuote:
             output += arg[1]
-    print(output[:-1])
+    print(output.strip())
 
 def cmdType(commandArgs):
     try:
