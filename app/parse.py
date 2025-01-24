@@ -29,7 +29,8 @@ def parse(userInput):
                     quoteStack.append("'")
             case ' ':
                 if len(quoteStack) == 0:
-                    userTokens.append((tokenType.string, tokenString))
+                    if len(tokenString) != 0:
+                        userTokens.append((tokenType.string, tokenString))
                     tokenString = ""
                 else:
                     tokenString += char
