@@ -55,5 +55,6 @@ commandDict = {
     "exit": cmdExit,
     "echo": cmdEcho,
     "type": cmdType,
-    "exec": cmdExec
+    "exec": cmdExec,
+    "pwd" : cmdPwd,
 }
