@@ -73,5 +73,4 @@ def parse(userInput):
                         tokenString += char
     if len(tokenString) != 0:
         userTokens.append(Token(tokenType.string, tokenString,False))
-    print(userTokens)
     return userTokens
