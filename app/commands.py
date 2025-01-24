@@ -13,18 +13,18 @@ def init():
 def pathFallback(userTokens):
     foundCommand = "" 
     for path in paths:
-        fullPath = os.path.join(path, userTokens[0][1])
+        fullPath = os.path.join(path, userTokens[0].value)
         if os.path.exists(fullPath):
             foundCommand = fullPath
     if foundCommand:
-        return (parse.tokenType.string, foundCommand)
+        return parse.Token(parse.tokenType.string, foundCommand,True)
     else:
-        print(f"{userTokens[0][1]}: not found")
+        print(f"{userTokens[0].value}: not found")
         return None
 
 def cmdExit(commandArgs):
     if len(commandArgs) != 0:
-        exitCode = int(commandArgs[1][1])
+        exitCode = int(commandArgs[0]value)
     else:
         exitCode = 0
     sys.exit(exitCode)
@@ -33,32 +33,29 @@ def cmdExit(commandArgs):
 def cmdEcho(commandArgs):
     output = ""
     for arg in commandArgs:
-            output += arg[1]
+            output += arg.value
     print(output.strip())
 
 def cmdType(commandArgs):
     try:
-        commandDict[commandArgs[1][1]]
-        print(commandArgs[1][1] + " is a shell builtin")
+        commandDict[commandArgs[0].value]
+        print(commandArgs[0].value + " is a shell builtin")
     except KeyError:
-        pathCommand = pathFallback(commandArgs[1:])
+        pathCommand = pathFallback(commandArgs)
         if pathCommand is not None:
-            print(commandArgs[1][1] + " is " + pathCommand[1])
+            print(commandArgs[0].value + " is " + pathCommand[1])
 
 def cmdExec(commandArgs):
-    pathCommand = commandArgs[0][1].split(os.sep)[-1]
+    pathCommand = commandArgs[0].value.split(os.sep)[-1]
     try:
-        commandDict[commandArgs[0][1]](commandArgs[1:])
+        commandDict[commandArgs[0].value](commandArgs[1:])
     except KeyError:
         output = ""
         for arg in commandArgs[1:]:
-            match arg[0]:
-                case parse.tokenType.string | parse.tokenType.whitespace:
-                    output += arg[1]
-                case parse.tokenType.singleQuote:
-                    output += "'" + arg[1] + "'"
-                case parse.tokenType.doubleQuote:
-                    output += '"' + arg[1] + '"'
+            if arg.followed_by_whitespace:
+                output += arg.value + " "
+            else:
+                output += arg.value
         toSendToOs = pathCommand+ " " + output
         os.system(toSendToOs)
 
@@ -69,9 +66,9 @@ def cmdCd(commandArgs):
     if len(commandArgs) < 1:
         print("Usage: cd <directory>")
         return
-    cdDir = os.path.expanduser(commandArgs[1][1])
+    cdDir = os.path.expanduser(commandArgs[0].value)
     if not os.path.exists(cdDir):
-        print(f"cd: {commandArgs[1][1]}: No such file or directory")
+        print(f"cd: {commandArgs[0].value}: No such file or directory")
         return
     os.chdir(cdDir)
 

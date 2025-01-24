@@ -1,13 +1,28 @@
 from enum import Enum
-import sys
 from enum import Enum
-from typing import Tuple
 class tokenType(Enum):
-    string = 0
-    singleQuote = 1
-    doubleQuote = 2
-    whitespace = 3
-type token = Tuple[tokenType, str]
+    unknown = 0
+    string = 1
+    singleQuote = 2
+    doubleQuote = 3
+    whitespace = 4
+
+
+class Token:
+    def __init__(self, token_type, value, followed_by_whitespace):
+        self.token_type = token_type
+        self.value = value
+        self.followed_by_whitespace = followed_by_whitespace
+
+    def __getitem__(self, index):
+        if index == 0:
+            return self.token_type
+        elif index == 1:
+            return self.value
+        elif index == 2:
+            return self.followed_by_whitespace
+
+    
 def parse(userInput):
     userTokens = []
     quoteStack = []
@@ -17,44 +32,28 @@ def parse(userInput):
             case '"':
                 if len(quoteStack) > 0 and quoteStack[-1] == '"':
                     quoteStack.pop()
-                    userTokens.append((tokenType.doubleQuote, tokenString))
+                    userTokens.append(Token(tokenType.doubleQuote, tokenString,False))
                     tokenString = ""
                 else:
                     quoteStack.append('"')
             case "'":
                 if len(quoteStack) > 0 and quoteStack[-1] == "'":
                     quoteStack.pop()
-                    userTokens.append((tokenType.singleQuote, tokenString))
+                    userTokens.append(Token(tokenType.singleQuote, tokenString,False))
                     tokenString = ""
                 else:
                     quoteStack.append("'")
             case ' ':
                 if len(quoteStack) == 0:
                     if len(tokenString) != 0:
-                        userTokens.append((tokenType.string, tokenString))
-                    userTokens.append((tokenType.whitespace, char))
+                        userTokens.append(Token(tokenType.string, tokenString, True))
+                    else:
+                        userTokens[-1].followedbyWhitespace = True
                     tokenString = ""
                 else:
                     tokenString += char
             case _:
                     tokenString += char
     if len(tokenString) != 0:
-        userTokens.append((tokenType.string, tokenString))
-    userTokens = removedDuplicates(userTokens, tokenType.whitespace)
+        userTokens.append(Token(tokenType.string, tokenString,False))
     return userTokens
-
-
-def removedDuplicates(userTokens, tokenType):
-    newTokens = []
-    i = 0
-    while i < len(userTokens):
-        if userTokens[i][0] == tokenType:
-            if i == len(userTokens) - 1:
-                newTokens.append(userTokens[i])
-            else:
-                if userTokens[i-1][0] != tokenType:
-                    newTokens.append(userTokens[i])
-        else:
-            newTokens.append(userTokens[i])
-        i += 1
-    return newTokens
