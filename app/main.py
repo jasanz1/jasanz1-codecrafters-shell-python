@@ -14,7 +14,10 @@ def main():
             try:
                 commands.commandDict[userTokens[0]](userTokens[1:])
             except KeyError:
-                commands.pathFallback(userTokens)
+                fallBackCommand = commands.pathFallback(userTokens)
+                if fallBackCommand is not None:
+                    commands.cmdExec([fallBackCommand] + userTokens[1:])
+                
         sys.stdout.write("$ ")
 
 

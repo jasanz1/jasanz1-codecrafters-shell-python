@@ -45,9 +45,11 @@ def cmdExec(command):
     try:
         commandDict[command[0]](command[1:])
     except KeyError:
-            os.system(command)
+        os.system(" ".join(command))
+
 commandDict = {
     "exit": cmdExit,
     "echo": cmdEcho,
     "type": cmdType,
+    "exec": cmdExec
 }
