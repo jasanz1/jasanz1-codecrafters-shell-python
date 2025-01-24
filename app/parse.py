@@ -45,7 +45,7 @@ def parse(userInput):
             debug.debug(f"not escaped: {char}")
             match char:
                 case '"':
-                    if len(quoteStack) > 0 and quoteStack[-1] == "'":
+                    if len(quoteStack) == 0 or quoteStack[-1] == "'":
                         tokenString += char
                     if len(quoteStack) > 0 and quoteStack[-1] == '"':
                         quoteStack.pop()
@@ -59,7 +59,7 @@ def parse(userInput):
                         userTokens.append(Token(tokenType.singleQuote, tokenString,False))
                         tokenString = ""
                     else:
-                        if len(quoteStack) == 0 and quoteStack[-1] != '"':
+                        if len(quoteStack) == 0 or quoteStack[-1] != '"':
                             quoteStack.append("'")
                         else:
                             tokenString += char
