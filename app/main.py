@@ -9,6 +9,7 @@ def main():
     # Wait for user input
     while True:
         userInput = input()
+        userInput = userInput.strip()
         userTokens = parse.parse(userInput)
         if len(userTokens) != 0:
             try:

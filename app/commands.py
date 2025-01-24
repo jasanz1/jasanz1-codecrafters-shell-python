@@ -34,11 +34,6 @@ def cmdExit(commandArgs):
 def cmdEcho(commandArgs):
     output = ""
     for arg in commandArgs:
-        if arg[0] == parse.tokenType.string:
-            output += arg[1] + " "
-        elif arg[0] == parse.tokenType.singleQuote:
-            output += arg[1]
-        elif arg[0] == parse.tokenType.doubleQuote:
             output += arg[1]
     print(output.strip())
 
