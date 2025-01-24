@@ -1,8 +1,10 @@
 import sys
 import app.commands as commands
+import os
 def main():
     # Uncomment this block to pass the first stage
     sys.stdout.write("$ ")
+    commands.init()
 
     # Wait for user input
     while True:
@@ -12,7 +14,7 @@ def main():
             try:
                 commands.commandDict[userTokens[0]](userTokens[1:])
             except KeyError:
-                print(userInput + ": command not found")
+                commands.pathFallback(userTokens)
         sys.stdout.write("$ ")
 
 
