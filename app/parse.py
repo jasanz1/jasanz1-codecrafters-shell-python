@@ -38,12 +38,16 @@ def parse(userInput):
     escaped = False
     for char in userInput:
         if escaped:
+            debug.debug(f"escaped: {char}")
             tokenString += char
             escaped = False
         else:
+            debug.debug(f"not escaped: {char}")
             match char:
                 case '"':
-                    if len(quoteStack) > 0 and quoteStack[-1] == '"':
+                    if len(quoteStack) == 0 or quoteStack[-1] == "'":
+                        tokenString += char
+                    elif len(quoteStack) > 0 and quoteStack[-1] == '"':
                         quoteStack.pop()
                         userTokens.append(Token(tokenType.doubleQuote, tokenString,False))
                         tokenString = ""
