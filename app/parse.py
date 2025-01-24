@@ -50,7 +50,7 @@ def parse(userInput):
                     userTokens.append(Token(tokenType.singleQuote, tokenString,False))
                     tokenString = ""
                 else:
-                    if len(quoteStack) > 0 and quoteStack[-1] != '"':
+                    if len(quoteStack) == 0 or quoteStack[-1] != '"':
                         quoteStack.append("'")
                     else:
                         tokenString += char
