@@ -51,7 +51,10 @@ def cmdExec(commandArgs):
     try:
         commandDict[commandArgs[0][1]](commandArgs[1:])
     except KeyError:
-        os.system(" ".join([pathCommand] + commandArgs[1:]))
+        output = ""
+        for arg in commandArgs:
+            output += arg[1]
+        os.system(" ".join(pathCommand + output))
 
 def cmdPwd(_):
     print(os.getcwd())
