@@ -43,7 +43,7 @@ def cmdType(commandArgs):
     except KeyError:
         pathCommand = pathFallback(commandArgs[1:])
         if pathCommand is not None:
-            print(commandArgs[0][1] + " is " + pathCommand[1])
+            print(commandArgs[1][1] + " is " + pathCommand[1])
 
 def cmdExec(commandArgs):
     pathCommand = commandArgs[0][1].split(os.sep)[-1]
