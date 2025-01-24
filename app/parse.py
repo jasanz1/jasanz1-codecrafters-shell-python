@@ -40,7 +40,7 @@ def parse(userInput):
                     tokenString += char
     if len(tokenString) != 0:
         userTokens.append((tokenType.string, tokenString))
-
+    userTokens = removedDuplicates(userTokens, tokenType.whitespace)
     return userTokens
 
 
