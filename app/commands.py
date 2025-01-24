@@ -1,3 +1,4 @@
+from posix import chdir
 import sys
 import os
 def init():
@@ -55,10 +56,12 @@ def cmdCd(commandArgs):
     if len(commandArgs) == 0:
         print("Usage: cd <directory>")
         return
-    if not os.path.exists(commandArgs[0]):
+    cdDir = os.path.expanduser(commandArgs[0])
+    if not os.path.exists(cdDir):
         print(f"cd: {commandArgs[0]}: No such file or directory")
         return
-    os.chdir(commandArgs[0])
+    os.chdir(cdDir)
+
 commandDict = {
     "exit": cmdExit,
     "echo": cmdEcho,
