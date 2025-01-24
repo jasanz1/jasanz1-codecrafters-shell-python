@@ -33,10 +33,9 @@ def cmdExit(commandArgs):
 def cmdEcho(commandArgs):
     output = ""
     for arg in commandArgs:
+            output += arg.value
             if arg.followed_by_whitespace:
-                output += arg.value + " "
-            else:
-                output += arg.value
+                output += " "
     print(output.strip())
 
 def cmdType(commandArgs):
