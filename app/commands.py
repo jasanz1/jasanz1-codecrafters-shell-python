@@ -67,12 +67,12 @@ def cmdPwd(_):
     print(os.getcwd())
 
 def cmdCd(commandArgs):
-    if len(commandArgs) == 0:
+    if len(commandArgs) < 1:
         print("Usage: cd <directory>")
         return
-    cdDir = os.path.expanduser(commandArgs[0][1])
+    cdDir = os.path.expanduser(commandArgs[1][1])
     if not os.path.exists(cdDir):
-        print(f"cd: {commandArgs[0][1]}: No such file or directory")
+        print(f"cd: {commandArgs[1][1]}: No such file or directory")
         return
     os.chdir(cdDir)
 
