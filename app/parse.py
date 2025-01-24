@@ -62,6 +62,8 @@ def parse(userInput):
                 case '\\':
                     if len(quoteStack) == 0 or quoteStack[-1] != '"':
                         escaped = True
+                    elif quoteStack[-1] == "'":
+                        tokenString += char
                     else:
                         tokenString += char
                 case ' ':
