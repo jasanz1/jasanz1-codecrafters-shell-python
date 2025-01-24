@@ -17,10 +17,10 @@ class Token:
     def setFollowedByWhitespace(self, followed_by_whitespace):
         self.followed_by_whitespace = followed_by_whitespace
     def __str__(self):
-        return f"{self.token_type}: '{self.value}' whitespace: {self.followed_by_whitespace}"
+        return f"<{self.token_type}: '{self.value}' whitespace: {self.followed_by_whitespace}>"
 
     def __repr__(self):
-        return f"{self.token_type}: '{self.value}' whitespace: {self.followed_by_whitespace}"
+        return f"<{self.token_type}: '{self.value}' whitespace: {self.followed_by_whitespace}>"
 
     def __getitem__(self, index):
         if index == 0:
@@ -40,36 +40,38 @@ def parse(userInput):
         if escaped:
             tokenString += char
             escaped = False
-        match char:
-            case '"':
-                if len(quoteStack) > 0 and quoteStack[-1] == '"':
-                    quoteStack.pop()
-                    userTokens.append(Token(tokenType.doubleQuote, tokenString,False))
-                    tokenString = ""
-                else:
-                    quoteStack.append('"')
-            case "'":
-                if len(quoteStack) > 0 and quoteStack[-1] == "'":
-                    quoteStack.pop()
-                    userTokens.append(Token(tokenType.singleQuote, tokenString,False))
-                    tokenString = ""
-                else:
-                    if len(quoteStack) == 0 or quoteStack[-1] != '"':
-                        quoteStack.append("'")
+        else:
+            match char:
+                case '"':
+                    if len(quoteStack) > 0 and quoteStack[-1] == '"':
+                        quoteStack.pop()
+                        userTokens.append(Token(tokenType.doubleQuote, tokenString,False))
+                        tokenString = ""
+                    else:
+                        quoteStack.append('"')
+                case "'":
+                    if len(quoteStack) > 0 and quoteStack[-1] == "'":
+                        quoteStack.pop()
+                        userTokens.append(Token(tokenType.singleQuote, tokenString,False))
+                        tokenString = ""
+                    else:
+                        if len(quoteStack) == 0 or quoteStack[-1] != '"':
+                            quoteStack.append("'")
+                        else:
+                            tokenString += char
+                case '\\':
+                    escaped = True
+                case ' ':
+                    if len(quoteStack) == 0:
+                        if len(tokenString) != 0:
+                            userTokens.append(Token(tokenType.string, tokenString, False))
+                        userTokens[-1].setFollowedByWhitespace(True)
+                        tokenString = ""
                     else:
                         tokenString += char
-            case '\\':
-                escaped = True
-            case ' ':
-                if len(quoteStack) == 0:
-                    if len(tokenString) != 0:
-                        userTokens.append(Token(tokenType.string, tokenString, False))
-                    userTokens[-1].setFollowedByWhitespace(True)
-                    tokenString = ""
-                else:
-                    tokenString += char
-            case _:
-                    tokenString += char
+                case _:
+                        tokenString += char
     if len(tokenString) != 0:
         userTokens.append(Token(tokenType.string, tokenString,False))
+    print(userTokens)
     return userTokens
