@@ -35,7 +35,11 @@ def parse(userInput):
     userTokens = []
     quoteStack = []
     tokenString = ""
+    escaped = False
     for char in userInput:
+        if escaped:
+            tokenString += char
+            escaped = False
         match char:
             case '"':
                 if len(quoteStack) > 0 and quoteStack[-1] == '"':
@@ -54,6 +58,8 @@ def parse(userInput):
                         quoteStack.append("'")
                     else:
                         tokenString += char
+            case '\\':
+                escaped = True
             case ' ':
                 if len(quoteStack) == 0:
                     if len(tokenString) != 0:
