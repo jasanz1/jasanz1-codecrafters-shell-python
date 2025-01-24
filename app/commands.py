@@ -13,13 +13,13 @@ def init():
 def pathFallback(userTokens):
     foundCommand = "" 
     for path in paths:
-        fullPath = os.path.join(path, userTokens[1][1])
+        fullPath = os.path.join(path, userTokens[0][1])
         if os.path.exists(fullPath):
             foundCommand = fullPath
     if foundCommand:
         return (parse.tokenType.string, foundCommand)
     else:
-        print(f"{userTokens[1][1]}: not found")
+        print(f"{userTokens[0][1]}: not found")
         return None
 
 def cmdExit(commandArgs):
