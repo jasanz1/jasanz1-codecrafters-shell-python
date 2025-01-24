@@ -9,7 +9,8 @@ def cmdEcho(message,_):
 
 def cmdType(command,commandDict):
     try:
-        print(commandDict[command[0]] + " is a shell builtin")
+        commandDict[command[0]]
+        print(command[0] + " is a shell builtin")
     except KeyError:
         print(command[0] + ": not found")
 
@@ -19,6 +20,7 @@ def main():
     commandDict = {
         "exit": cmdExit,
         "echo": cmdEcho,
+        "type": cmdType,
     }
 
     # Wait for user input
