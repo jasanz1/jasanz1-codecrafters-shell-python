@@ -1,5 +1,5 @@
 from enum import Enum
-from enum import Enum
+import app.debug as debug
 class tokenType(Enum):
     unknown = 0
     string = 1
@@ -60,7 +60,10 @@ def parse(userInput):
                         else:
                             tokenString += char
                 case '\\':
-                    escaped = True
+                    if len(quoteStack) == 0 or quoteStack[-1] != '"':
+                        escaped = True
+                    else:
+                        tokenString += char
                 case ' ':
                     if len(quoteStack) == 0:
                         if len(tokenString) != 0:
