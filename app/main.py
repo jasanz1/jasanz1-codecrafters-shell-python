@@ -14,7 +14,10 @@ def main():
                 case "exit":
                     exitCode = int(userTokens[1])
                     sys.exit(exitCode)
-        print(userInput + ": command not found")
+                case "echo":
+                    print(" ".join(userTokens[1:]))
+                case _:
+                    print(userInput + ": command not found")
         sys.stdout.write("$ ")
 
 
