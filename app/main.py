@@ -8,6 +8,9 @@ def main():
     # Wait for user input
     while True:
         userInput = input()
+        match userInput:
+            case "exit":
+                sys.exit(0)
         print(userInput + ": command not found")
         sys.stdout.write("$ ")
 
