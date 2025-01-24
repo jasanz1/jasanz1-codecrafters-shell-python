@@ -18,7 +18,7 @@ def pathFallback(userTokens):
         if os.path.exists(fullPath):
             foundCommand = fullPath
     if foundCommand:
-        return foundCommand
+        return (parse.tokenType.string, foundCommand)
     else:
         print(f"{userTokens[0][1]}: not found")
         return None
@@ -52,9 +52,16 @@ def cmdExec(commandArgs):
         commandDict[commandArgs[0][1]](commandArgs[1:])
     except KeyError:
         output = ""
-        for arg in commandArgs:
-            output += arg[1]
-        os.system(" ".join(pathCommand + output))
+        for arg in commandArgs[1:]:
+            match arg[0]:
+                case parse.tokenType.string | parse.tokenType.whitespace:
+                    output += arg[1]
+                case parse.tokenType.singleQuote:
+                    output += "'" + arg[1] + "'"
+                case parse.tokenType.doubleQuote:
+                    output += '"' + arg[1] + '"'
+        toSendToOs = pathCommand+ " " + output
+        os.system(toSendToOs)
 
 def cmdPwd(_):
     print(os.getcwd())
