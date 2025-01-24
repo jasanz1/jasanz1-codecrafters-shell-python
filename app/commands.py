@@ -42,10 +42,11 @@ def cmdType(command):
             print(command[0] + " is "+ pathCommand)
 
 def cmdExec(command):
+    pathCommand = command[0].split(os.sep)[-1]
     try:
         commandDict[command[0]](command[1:])
     except KeyError:
-        os.system(" ".join(command))
+        os.system(" ".join([pathCommand] + command[1:]))
 
 commandDict = {
     "exit": cmdExit,
