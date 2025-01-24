@@ -32,7 +32,6 @@ def cmdExit(commandArgs):
     
 def cmdEcho(commandArgs):
     output = ""
-    print(commandArgs)
     for arg in commandArgs:
             output += arg[1] + " "
     print(output[:-1])
