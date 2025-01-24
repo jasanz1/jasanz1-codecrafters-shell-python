@@ -13,39 +13,43 @@ def init():
 def pathFallback(userTokens):
     foundCommand = "" 
     for path in paths:
-        fullPath = os.path.join(path, userTokens[0])
+        fullPath = os.path.join(path, userTokens[0][1])
         if os.path.exists(fullPath):
             foundCommand = fullPath
     if foundCommand:
         return foundCommand
     else:
-        print(f"{userTokens[0]}: not found")
+        print(f"{userTokens[0][1]}: not found")
         return None
 
 def cmdExit(commandArgs):
     if len(commandArgs) != 0:
-        exitCode = int(commandArgs[0])
+        exitCode = int(commandArgs[0][1])
     else:
         exitCode = 0
     sys.exit(exitCode)
 
     
 def cmdEcho(commandArgs):
-    print(" ".join(commandArgs))
+    output = ""
+    print(commandArgs)
+    for arg in commandArgs:
+            output += arg[1] + " "
+    print(output[:-1])
 
 def cmdType(commandArgs):
     try:
-        commandDict[commandArgs[0]]
-        print(commandArgs[0] + " is a shell builtin")
+        commandDict[commandArgs[0][1]]
+        print(commandArgs[0][1] + " is a shell builtin")
     except KeyError:
         pathCommand = pathFallback(commandArgs)
         if pathCommand is not None:
-            print(commandArgs[0] + " is "+ pathCommand)
+            print(commandArgs[0][1] + " is "+ pathCommand)
 
 def cmdExec(commandArgs):
-    pathCommand = commandArgs[0].split(os.sep)[-1]
+    pathCommand = commandArgs[0][1].split(os.sep)[-1]
     try:
-        commandDict[commandArgs[0]](commandArgs[1:])
+        commandDict[commandArgs[0][1]](commandArgs[1:])
     except KeyError:
         os.system(" ".join([pathCommand] + commandArgs[1:]))
 
@@ -56,9 +60,9 @@ def cmdCd(commandArgs):
     if len(commandArgs) == 0:
         print("Usage: cd <directory>")
         return
-    cdDir = os.path.expanduser(commandArgs[0])
+    cdDir = os.path.expanduser(commandArgs[0][1])
     if not os.path.exists(cdDir):
-        print(f"cd: {commandArgs[0]}: No such file or directory")
+        print(f"cd: {commandArgs[0][1]}: No such file or directory")
         return
     os.chdir(cdDir)
 

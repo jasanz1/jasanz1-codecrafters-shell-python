@@ -1,6 +1,6 @@
 import sys
 import app.commands as commands
-import os
+import app.parse as parse
 def main():
     # Uncomment this block to pass the first stage
     sys.stdout.write("$ ")
@@ -9,10 +9,10 @@ def main():
     # Wait for user input
     while True:
         userInput = input()
-        userTokens = userInput.split()
+        userTokens = parse.parse(userInput)
         if len(userTokens) != 0:
             try:
-                commands.commandDict[userTokens[0]](userTokens[1:])
+                commands.commandDict[userTokens[0][1]](userTokens[1:])
             except KeyError:
                 fallBackCommand = commands.pathFallback(userTokens)
                 if fallBackCommand is not None:
