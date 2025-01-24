@@ -1,6 +1,7 @@
 from posix import chdir
 import sys
 import os
+import app.parse as parse
 def init():
     global paths
     path_temp = os.environ.get("PATH")
@@ -33,7 +34,12 @@ def cmdExit(commandArgs):
 def cmdEcho(commandArgs):
     output = ""
     for arg in commandArgs:
+        if arg[0] == tokenType.string:
             output += arg[1] + " "
+        elif arg[0] == tokenType.singleQuote:
+            output += arg[1]
+        elif arg[0] == tokenType.doubleQuote:
+            output += arg[1]
     print(output[:-1])
 
 def cmdType(commandArgs):
