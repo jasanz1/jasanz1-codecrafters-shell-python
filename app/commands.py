@@ -1,4 +1,3 @@
-from posix import chdir
 import sys
 import os
 import app.parse as parse
@@ -14,18 +13,18 @@ def init():
 def pathFallback(userTokens):
     foundCommand = "" 
     for path in paths:
-        fullPath = os.path.join(path, userTokens[0][1])
+        fullPath = os.path.join(path, userTokens[1][1])
         if os.path.exists(fullPath):
             foundCommand = fullPath
     if foundCommand:
         return (parse.tokenType.string, foundCommand)
     else:
-        print(f"{userTokens[0][1]}: not found")
+        print(f"{userTokens[1][1]}: not found")
         return None
 
 def cmdExit(commandArgs):
     if len(commandArgs) != 0:
-        exitCode = int(commandArgs[0][1])
+        exitCode = int(commandArgs[1][1])
     else:
         exitCode = 0
     sys.exit(exitCode)
@@ -39,12 +38,12 @@ def cmdEcho(commandArgs):
 
 def cmdType(commandArgs):
     try:
-        commandDict[commandArgs[0][1]]
-        print(commandArgs[0][1] + " is a shell builtin")
+        commandDict[commandArgs[1][1]]
+        print(commandArgs[1][1] + " is a shell builtin")
     except KeyError:
         pathCommand = pathFallback(commandArgs)
         if pathCommand is not None:
-            print(commandArgs[0][1] + " is "+ pathCommand)
+            print(commandArgs[1][1] + " is "+ pathCommand)
 
 def cmdExec(commandArgs):
     pathCommand = commandArgs[0][1].split(os.sep)[-1]
