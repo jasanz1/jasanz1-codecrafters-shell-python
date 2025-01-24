@@ -21,32 +21,35 @@ def pathFallback(userTokens):
         print(f"{userTokens[0]}: not found")
         return None
 
-def cmdExit(code):
-    if len(code) != 0:
-        exitCode = int(code[0])
+def cmdExit(commandArgs):
+    if len(commandArgs) != 0:
+        exitCode = int(commandArgs[0])
     else:
         exitCode = 0
     sys.exit(exitCode)
 
     
-def cmdEcho(message):
-    print(" ".join(message))
+def cmdEcho(commandArgs):
+    print(" ".join(commandArgs))
 
-def cmdType(command):
+def cmdType(commandArgs):
     try:
-        commandDict[command[0]]
-        print(command[0] + " is a shell builtin")
+        commandDict[commandArgs[0]]
+        print(commandArgs[0] + " is a shell builtin")
     except KeyError:
-        pathCommand = pathFallback(command)
+        pathCommand = pathFallback(commandArgs)
         if pathCommand is not None:
-            print(command[0] + " is "+ pathCommand)
+            print(commandArgs[0] + " is "+ pathCommand)
 
-def cmdExec(command):
-    pathCommand = command[0].split(os.sep)[-1]
+def cmdExec(commandArgs):
+    pathCommand = commandArgs[0].split(os.sep)[-1]
     try:
-        commandDict[command[0]](command[1:])
+        commandDict[commandArgs[0]](commandArgs[1:])
     except KeyError:
-        os.system(" ".join([pathCommand] + command[1:]))
+        os.system(" ".join([pathCommand] + commandArgs[1:]))
+
+def cmdPwd(_):
+    print(os.getcwd())
 
 commandDict = {
     "exit": cmdExit,
