@@ -14,6 +14,14 @@ class Token:
         self.value = value
         self.followed_by_whitespace = followed_by_whitespace
 
+    def setFollowedByWhitespace(self, followed_by_whitespace):
+        self.followed_by_whitespace = followed_by_whitespace
+    def __str__(self):
+        return f"{self.token_type}: '{self.value}' whitespace: {self.followed_by_whitespace}"
+
+    def __repr__(self):
+        return f"{self.token_type}: '{self.value}' whitespace: {self.followed_by_whitespace}"
+
     def __getitem__(self, index):
         if index == 0:
             return self.token_type
@@ -46,9 +54,8 @@ def parse(userInput):
             case ' ':
                 if len(quoteStack) == 0:
                     if len(tokenString) != 0:
-                        userTokens.append(Token(tokenType.string, tokenString, True))
-                    else:
-                        userTokens[-1].followedbyWhitespace = True
+                        userTokens.append(Token(tokenType.string, tokenString, False))
+                    userTokens[-1].setFollowedByWhitespace(True)
                     tokenString = ""
                 else:
                     tokenString += char

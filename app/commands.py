@@ -24,7 +24,7 @@ def pathFallback(userTokens):
 
 def cmdExit(commandArgs):
     if len(commandArgs) != 0:
-        exitCode = int(commandArgs[0]value)
+        exitCode = int(commandArgs[0].value)
     else:
         exitCode = 0
     sys.exit(exitCode)
@@ -33,7 +33,10 @@ def cmdExit(commandArgs):
 def cmdEcho(commandArgs):
     output = ""
     for arg in commandArgs:
-            output += arg.value
+            if arg.followed_by_whitespace:
+                output += arg.value + " "
+            else:
+                output += arg.value
     print(output.strip())
 
 def cmdType(commandArgs):
@@ -50,12 +53,18 @@ def cmdExec(commandArgs):
     try:
         commandDict[commandArgs[0].value](commandArgs[1:])
     except KeyError:
+        print(str(commandArgs))
         output = ""
         for arg in commandArgs[1:]:
+            match arg.token_type:
+                case parse.tokenType.string:
+                    output += arg.value
+                case parse.tokenType.singleQuote:
+                    output += "'" + arg.value + "'"
+                case parse.tokenType.doubleQuote:
+                    output += '"' + arg.value + '"'
             if arg.followed_by_whitespace:
-                output += arg.value + " "
-            else:
-                output += arg.value
+                output += " "
         toSendToOs = pathCommand+ " " + output
         os.system(toSendToOs)
 

@@ -13,7 +13,7 @@ def main():
         userTokens = parse.parse(userInput)
         if len(userTokens) != 0:
             try:
-                commands.commandDict[userTokens[0][1]](userTokens[1:])
+                commands.commandDict[userTokens[0].value](userTokens[1:])
             except KeyError:
                 fallBackCommand = commands.pathFallback(userTokens)
                 if fallBackCommand is not None:
