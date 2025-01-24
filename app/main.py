@@ -1,27 +1,8 @@
 import sys
-def cmdExit(code,_):
-    exitCode = int(code[0])
-    sys.exit(exitCode)
-
-    
-def cmdEcho(message,_):
-    print(message)
-
-def cmdType(command,commandDict):
-    try:
-        commandDict[command[0]]
-        print(command[0] + " is a shell builtin")
-    except KeyError:
-        print(command[0] + ": not found")
-
+import app.commands as commands
 def main():
     # Uncomment this block to pass the first stage
     sys.stdout.write("$ ")
-    commandDict = {
-        "exit": cmdExit,
-        "echo": cmdEcho,
-        "type": cmdType,
-    }
 
     # Wait for user input
     while True:
@@ -29,7 +10,7 @@ def main():
         userTokens = userInput.split()
         if len(userTokens) != 0:
             try:
-                commandDict[userTokens[0]](userTokens[1:],commandDict)
+                commands.commandDict[userTokens[0]](userTokens[1:])
             except KeyError:
                 print(userInput + ": command not found")
         sys.stdout.write("$ ")
