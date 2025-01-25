@@ -14,7 +14,8 @@ def init():
 def pathFallback(userTokens):
     foundCommand = "" 
     for path in paths:
-        fullPath = os.path.join(path, userTokens[0].wrappedToken())
+        fullPath = os.path.join(path, userTokens[0].value)
+        fullPath = fullPath.replace(' ', r'\ ') 
         debug.debug(f"fullPath: {fullPath}")
         if os.path.exists(fullPath):
             foundCommand = fullPath
