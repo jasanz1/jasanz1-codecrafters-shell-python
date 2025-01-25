@@ -5,7 +5,6 @@ class tokenType(Enum):
     string = 1
     singleQuote = 2
     doubleQuote = 3
-    whitespace = 4
 
 
 class Token:
@@ -22,6 +21,13 @@ class Token:
     def __repr__(self):
         return f"<{self.token_type}: '{self.value}' whitespace: {self.followed_by_whitespace}>"
 
+    def wrappedToken(self):
+        if self.token_type == tokenType.string:
+            return f"{self.value}"
+        elif self.token_type == tokenType.singleQuote:
+            return f"'{self.value}'"
+        elif self.token_type == tokenType.doubleQuote:
+            return f'"{self.value}"'
     def __getitem__(self, index):
         if index == 0:
             return self.token_type
@@ -53,9 +59,10 @@ def parse(userInput):
                     if len(tokenString) != 0:
                         userTokens.append(Token(tokenType.string, tokenString,False))
                 else:
-                    userTokens.append(Token(tokenType.whitespace, tokenString,True))
+                    userTokens.append(Token(tokenType.string, tokenString,True))
                 tokenString = ""
             case _:
+                debug.debug(f"string     : {char}")
                 tokenString += char
         i += 1
     if len(tokenString) != 0:

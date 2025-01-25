@@ -1,5 +1,6 @@
 import sys
 import os
+import app.debug as debug
 import app.parse as parse
 def init():
     global paths
@@ -13,7 +14,8 @@ def init():
 def pathFallback(userTokens):
     foundCommand = "" 
     for path in paths:
-        fullPath = os.path.join(path, userTokens[0].value)
+        fullPath = os.path.join(path, userTokens[0].wrappedToken())
+        debug.debug(f"fullPath: {fullPath}")
         if os.path.exists(fullPath):
             foundCommand = fullPath
     if foundCommand:
@@ -58,13 +60,7 @@ def cmdExec(commandArgs):
     except KeyError:
         output = ""
         for arg in commandArgs[1:]:
-            match arg.token_type:
-                case parse.tokenType.string:
-                    output += arg.value
-                case parse.tokenType.singleQuote:
-                    output += "'" + arg.value + "'"
-                case parse.tokenType.doubleQuote:
-                    output += '"' + arg.value + '"'
+            output += arg.wrappedToken()
             if arg.followed_by_whitespace:
                 output += " "
         toSendToOs = pathCommand+ " " + output
