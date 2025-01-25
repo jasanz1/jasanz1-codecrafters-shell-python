@@ -12,15 +12,14 @@ def init():
     return paths
 
 def pathFallback(userTokens):
-    foundCommand = "" 
+    foundPath = "" 
     for path in paths:
         fullPath = os.path.join(path, userTokens[0].value)
-        fullPath = fullPath.replace(' ', r'\ ') 
-        debug.debug(f"fullPath: {fullPath}")
         if os.path.exists(fullPath):
-            foundCommand = fullPath
-    if foundCommand:
-        return parse.Token(parse.tokenType.string, foundCommand,True)
+            foundPath = path
+            break
+    if foundPath:
+        return parse.Token(parse.tokenType.string, os.path.join(foundPath, userTokens[0].wrappedToken()),True)
     else:
         print(f"{userTokens[0].value}: not found")
         return None
