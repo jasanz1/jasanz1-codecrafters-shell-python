@@ -69,6 +69,7 @@ def singleQuote(userInput,i):
     i += 1
     while i < len(userInput):
         char = userInput[i]
+        debug.debug(f"singleQuote: {userInput[i:]}")
         if char == "'":
             return (Token(tokenType.singleQuote, tokenString, False),i)
         else:
@@ -77,6 +78,7 @@ def singleQuote(userInput,i):
     return (Token(tokenType.singleQuote, tokenString, False),i)
 
 def escapedChar(userInput,i):
+    debug.debug(f"escaped: {userInput[i+1:]}")
     return (userInput[i+1],i+1)
 
 def doubleQuote(userInput,i):
@@ -84,7 +86,7 @@ def doubleQuote(userInput,i):
     i += 1
     while i < len(userInput):
         char = userInput[i]
-        debug.debug(f"tokenString: {userInput[i:]}")
+        debug.debug(f"doubleQuote: {userInput[i:]}")
         match char:
             case '"':
                 return (Token(tokenType.doubleQuote, tokenString, False),i)
@@ -92,8 +94,11 @@ def doubleQuote(userInput,i):
                 singleQuoteReturn,i = singleQuote(userInput,i)
                 tokenString += "'" + singleQuoteReturn.value + "'"
             case '\\':
-                escapedCharReturn,i = escapedChar(userInput,i)
-                tokenString += escapedCharReturn
+                if userInput[i+1] == "\\" or userInput[i+1] == '"' or userInput[i+1] == "$":
+                    escapedCharReturn,i = escapedChar(userInput,i)
+                    tokenString += escapedCharReturn
+                else:
+                    tokenString += char
             case _:
                 tokenString += char
         i += 1
