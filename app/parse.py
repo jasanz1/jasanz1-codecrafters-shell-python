@@ -77,7 +77,7 @@ def singleQuote(userInput,i):
     return (Token(tokenType.singleQuote, tokenString, False),i)
 
 def escapedChar(userInput,i):
-    return (userInput[i+1],i+2)
+    return (userInput[i+1],i+1)
 
 def doubleQuote(userInput,i):
     tokenString = ""
