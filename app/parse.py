@@ -90,9 +90,6 @@ def doubleQuote(userInput,i):
         match char:
             case '"':
                 return (Token(tokenType.doubleQuote, tokenString, False),i)
-            case "'":
-                singleQuoteReturn,i = singleQuote(userInput,i)
-                tokenString += "'" + singleQuoteReturn.value + "'"
             case '\\':
                 if userInput[i+1] == "\\" or userInput[i+1] == '"' or userInput[i+1] == "$":
                     escapedCharReturn,i = escapedChar(userInput,i)
