@@ -85,7 +85,7 @@ def redirectOrAppend(userInput,i):
     i += 1
     debug.debug(f"roa        : {userInput[i:]}")
     if userInput[i] == " " or userInput[i] == ">":
-        if userInput[i] = ">":
+        if userInput[i] == ">":
             tokenString += userInput[i] 
             i += 1
             debug.debug(f"roa        : {userInput[i:]}")
