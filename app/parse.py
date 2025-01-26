@@ -5,6 +5,8 @@ class tokenType(Enum):
     string = 1
     singleQuote = 2
     doubleQuote = 3
+    redirect = 4
+    append = 5
 
 
 class Token:
@@ -22,12 +24,13 @@ class Token:
         return f"<{self.token_type}: '{self.value}' whitespace: {self.followed_by_whitespace}>"
 
     def wrappedToken(self):
-        if self.token_type == tokenType.string:
-            return f"{self.value}"
-        elif self.token_type == tokenType.singleQuote:
+        if self.token_type == tokenType.singleQuote:
             return f"'{self.value}'"
         elif self.token_type == tokenType.doubleQuote:
             return f'"{self.value}"'
+        return f"{self.value}"
+
+
     def __getitem__(self, index):
         if index == 0:
             return self.token_type
@@ -61,6 +64,12 @@ def parse(userInput):
                 else:
                     userTokens.append(Token(tokenType.string, tokenString,True))
                 tokenString = ""
+            case "1" | "2"  ">":
+                redirectOrAppendReturn,i,tokenStringtemp = redirectOrAppend(userInput,i)
+                if len(tokenString) != 0:
+                    tokenString = tokenStringtemp
+                else:
+                    userTokens.append(redirectOrAppendReturn)
             case _:
                 debug.debug(f"string     : {char}")
                 tokenString += char
@@ -70,6 +79,28 @@ def parse(userInput):
     debug.debug(f"userTokens: {userTokens}")
     return userTokens
 
+def redirectOrAppend(userInput,i):
+    tokenString = userInput[i] 
+    debug.debug(f"roa        : {userInput[i:]}")
+    i += 1
+    debug.debug(f"roa        : {userInput[i:]}")
+    if userInput[i] = " " or userInput[i] = ">":
+        if userInput[i] = ">":
+            tokenString += userInput[i] 
+            i += 1
+            debug.debug(f"roa        : {userInput[i:]}")
+            return (Token(tokenType.append, tokenString,False),i,"")
+        return (Token(tokenType.redirect, tokenString,False),i,"")
+    if userInput[i] == ">":
+        tokenString += userInput[i] 
+        if userInput[i+1] == ">":
+            i += 1
+            debug.debug(f"roa        : {userInput[i:]}")
+            tokenString += userInput[i] 
+            return (Token(tokenType.append, tokenString,False),i,"") 
+        else:
+            return (Token(tokenType.redirect, tokenString,False),i,"") 
+    return (Token(tokenType.string, tokenString,False),i,tokenString)
 
 def singleQuote(userInput,i):
     tokenString = ""

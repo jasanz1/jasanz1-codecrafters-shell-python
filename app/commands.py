@@ -36,12 +36,24 @@ def cmdEcho(commandArgs):
     output = ""
     i =0 
     while i < len(commandArgs):
+        if i < len(commandArgs)-1 and (commandArgs[i].token_type == parse.tokenType.redirect or commandArgs[i].token_type == parse.tokenType.append):
+            break
         output += commandArgs[i].value
         if commandArgs[i].followed_by_whitespace: 
             output += " "
         elif i < len(commandArgs)-1 and commandArgs[i].token_type == parse.tokenType.string and commandArgs[i+1].token_type == parse.tokenType.string:
             output += " "
         i += 1
+    if commandArgs[i].token_type == parse.tokenType.redirect:
+        debug.debug(f"Redirecting {commandArgs[0].value} to {commandArgs[i+1].value}")
+        with open(commandArgs[i+1].value, 'w', encoding='utf-8') as file:
+            file.write(output)
+        return
+    elif commandArgs[i].token_type == parse.tokenType.append:
+        debug.debug(f"Appending {commandArgs[0].value} to {commandArgs[i+1].value}")
+        with open(commandArgs[i+1].value, 'a', encoding='utf-8') as file:
+            file.write(output)
+        return
     print(output.strip())
 
 def cmdType(commandArgs):
