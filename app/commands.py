@@ -48,11 +48,13 @@ def cmdEcho(commandArgs):
         debug.debug(f"Redirecting {commandArgs[0].value} to {commandArgs[i+1].value}")
         with open(commandArgs[i+1].value, 'w', encoding='utf-8') as file:
             file.write(output)
+        print("")
         return
     elif commandArgs[i].token_type == parse.tokenType.append:
         debug.debug(f"Appending {commandArgs[0].value} to {commandArgs[i+1].value}")
         with open(commandArgs[i+1].value, 'a', encoding='utf-8') as file:
             file.write(output)
+        print("")
         return
     print(output.strip())
 
